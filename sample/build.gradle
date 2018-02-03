@@ -26,6 +26,10 @@ buildscript {
   }
 }
 
+plugins {
+  id "net.ltgt.errorprone" version "0.0.13"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -48,6 +52,7 @@ android {
 }
 
 dependencies {
+  annotationProcessor project(':static-analysis:autodispose-error-prone-checker')
   provided deps.misc.javaxExtras
   compile project(':android:autodispose-android')
   compile project(':android:autodispose-android-archcomponents')

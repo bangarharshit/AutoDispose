@@ -24,6 +24,7 @@ import android.util.Log;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import java.util.concurrent.TimeUnit;
@@ -46,13 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Using automatic disposal, this should determine that the correct time to
     // dispose is onDestroy (the opposite of onCreate).
-    Observable.interval(1, TimeUnit.SECONDS)
+    Disposable disposable = Observable.interval(1, TimeUnit.SECONDS)
         .doOnDispose(new Action() {
           @Override public void run() throws Exception {
             Log.i(TAG, "Disposing subscription from onCreate()");
           }
         })
-        .as(AutoDispose.<Long>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(new Consumer<Long>() {
           @Override public void accept(Long num) throws Exception {
             Log.i(TAG, "Started in onCreate(), running until onDestroy(): " + num);
